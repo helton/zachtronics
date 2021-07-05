@@ -1,0 +1,44 @@
+MARK START
+  NOOP
+  TEST MRD
+  FJMP END
+  COPY M X
+  MARK LOOP
+    LINK 800
+    SUBI X 1 X
+    TEST X < 0
+    FJMP LOOP
+    HOST M
+
+  REPL CLONE
+  GRAB M
+  MODE
+  MARK SEND_WORD
+    COPY F M
+    TEST EOF
+    FJMP SEND_WORD
+    COPY -9999 M
+    HALT
+    
+  MARK CLONE
+    MODE
+    MAKE
+    MARK RECEIVE_WORD
+      COPY M X
+      TEST X = -9999
+      TJMP START_GO_BACK
+      COPY X F
+      JUMP RECEIVE_WORD
+
+    MARK START_GO_BACK
+      MODE
+      COPY M X
+      MARK GET_BACK
+        LINK -1
+        SUBI X 1 X
+        TEST X < 0
+        FJMP GET_BACK
+        DROP
+        JUMP START
+
+MARK END
