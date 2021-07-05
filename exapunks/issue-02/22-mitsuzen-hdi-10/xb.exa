@@ -1,0 +1,23 @@
+NOTE H-HND => M-CNS
+LINK 800 
+
+MARK LOOP
+  LINK 3
+  LINK 3
+  LINK 3
+  
+  COPY #NERV X
+  
+  LINK -3
+  LINK -3
+  LINK -3
+  LINK -3
+  LINK -3
+  LINK -3
+  
+  COPY X #NERV
+  LINK 3
+  LINK 3
+  LINK 3
+
+  JUMP LOOP
