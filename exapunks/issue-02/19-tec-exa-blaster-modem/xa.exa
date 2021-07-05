@@ -1,0 +1,53 @@
+GRAB 301
+
+MARK START
+  LINK 800
+
+  COPY 11 X
+  MARK DIAL
+    TEST EOF
+    TJMP END
+    COPY F #DIAL
+    SUBI X 1 X
+    TEST X = 0
+    FJMP DIAL    
+
+  LINK -1
+  MODE
+  REPL READ_SONG
+  REPL SEND_SONG
+  MODE
+  LINK 800
+  COPY M #DIAL
+  LINK -1
+  JUMP START
+
+  MARK READ_SONG
+    GRAB 300
+    LINK 800
+    LINK 800
+    MARK READ_WORD
+      SEEK -9999
+      COPY F M
+      COPY F M
+      JUMP READ_WORD
+
+  MARK SEND_SONG
+    LINK 800
+    LINK 800
+    GRAB 200
+    MARK WRITE_WORD
+      COPY M F
+      COPY M F
+      TEST EOF
+      FJMP WRITE_WORD
+      DROP
+      KILL
+      GRAB 300
+      LINK -1
+      LINK -1
+      MODE
+      COPY -1 M
+
+  MARK END
+    LINK -1
