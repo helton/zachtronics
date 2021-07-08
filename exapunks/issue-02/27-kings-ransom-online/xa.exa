@@ -1,0 +1,49 @@
+GRAB 300
+LINK 800
+
+COPY 800 X
+MARK KILL_EXAS
+    LINK X
+    @REP 3
+    KILL
+    @END
+    LINK -1
+    ADDI X 1 X
+    TEST X > 805
+    FJMP KILL_EXAS
+
+COPY 800 X
+MARK GOTO_HOST
+    REPL RUN
+    COPY F M
+    SEEK -1
+    ADDI X 1 X
+    TEST X > 805
+    FJMP GOTO_HOST
+LINK -1
+HALT
+
+MARK RUN
+    LINK X
+    COPY M X
+    GRAB 200
+MARK BUILDING
+    SEEK -9999
+    SEEK 2
+    COPY X F
+    MARK LOOP_BUILDS
+      COPY F T
+      REPL OVERWRITE
+      TEST EOF
+      FJMP LOOP_BUILDS
+      JUMP END
+    MARK OVERWRITE
+      GRAB T
+      SEEK 9999
+      SEEK -1
+      TEST F > 0
+      TJMP BUILDING
+      SEEK -1
+      COPY X F
+
+MARK END

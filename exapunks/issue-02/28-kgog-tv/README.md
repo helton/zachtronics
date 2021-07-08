@@ -1,0 +1,3 @@
+# KGOG TV
+
+Set EXA XC to MODE = LOCAL
