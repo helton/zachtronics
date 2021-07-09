@@ -1,0 +1,67 @@
+MAKE
+
+NOTE GENERATE FILE
+COPY 0 X
+MARK LOOP
+  COPY M F
+  ADDI X 1 X
+  TEST X = 16
+  TJMP CHECK
+  JUMP LOOP
+
+  NOTE KEEP OR DISCARD?
+  MARK CHECK
+    MODE
+    SEEK -9999
+  
+    COPY 0 X
+    MARK SUM_DIGITS
+      MODI X 2 T
+      FJMP DOUBLE
+      JUMP DONT_DOUBLE
+
+      MARK DOUBLE
+        MULI F 2 T
+        JUMP KEEP_GOING
+
+      MARK DONT_DOUBLE
+        COPY F T
+
+      MARK KEEP_GOING
+        NOTE SEND
+        COPY T M
+        COPY T M
+
+      ADDI X 1 X
+      TEST X = 16
+      TJMP CHECK_DIGIT
+      JUMP SUM_DIGITS
+
+    MARK CHECK_DIGIT
+      NOTE SYNC
+      HOST M
+      TEST M = 0
+      FJMP CLEAR
+      JUMP FOUND
+
+      MARK CLEAR
+        SEEK -9999
+        MARK CLEAR_F
+          VOID F
+          TEST EOF
+          FJMP CLEAR_F
+
+      MARK GO
+        MODE
+        COPY 0 X
+        JUMP LOOP
+
+MARK FOUND
+  LINK 800
+  LINK 802
+  LINK 799
+  KILL
+  LINK -1
+  LINK -1
+  LINK -1 
+  KILL
