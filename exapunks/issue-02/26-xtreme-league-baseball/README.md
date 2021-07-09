@@ -1,3 +1,3 @@
-# Xtreme League Basketball
+# Xtreme League Baseball
 
 Set all EXAs to MODE = LOCAL
