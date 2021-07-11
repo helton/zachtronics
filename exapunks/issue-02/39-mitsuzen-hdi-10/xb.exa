@@ -1,0 +1,332 @@
+COPY 800 X
+
+MODE
+MARK VISIT
+  LINK X
+  REPL TRY_GRAB_FILE
+  COPY M T
+  TJMP GRAB_FILE
+  MAKE
+  COPY X F
+  HOST F  
+  JUMP FILE_AVAILABLE
+
+  MARK GRAB_FILE
+  GRAB T
+
+  MARK FILE_AVAILABLE
+    NOTE START VISITING
+    MARK TRYGO_N_3
+      SEEK -9999
+      SEEK 2
+      TEST EOF
+      TJMP GO_N_3
+      MARK L1
+        TEST F = -3
+        TJMP TRYGO_N_1
+        TEST EOF
+        FJMP L1
+      MARK GO_N_3
+        SEEK -9999
+        TEST F = 800
+        TJMP BWS_800_N_3
+        SEEK -9999
+        MULI F -1 T
+        JUMP TEST_N_3
+        MARK BWS_800_N_3
+          COPY -1 T
+        MARK TEST_N_3
+          TEST T = -3
+          TJMP TRYGO_N_1
+      COPY X T
+      SEEK 9999
+      COPY -3 F
+      COPY -3 X
+      REPL CAN_VISIT
+      COPY T X
+      @REP 5
+      NOOP
+      @END
+      TEST MRD
+      FJMP TRYGO_N_1
+      VOID M
+      DROP
+      COPY -3 X
+      JUMP VISIT
+
+    MARK TRYGO_N_1
+      SEEK -9999
+      SEEK 2
+      TEST EOF
+      TJMP GO_N_1
+      MARK L2
+        TEST F = -1
+        TJMP TRYGO_P_1
+        TEST EOF
+        FJMP L2
+      MARK GO_N_1
+        SEEK -9999
+        TEST F = 800
+        TJMP BWS_800_N_1
+        SEEK -9999
+        MULI F -1 T
+        JUMP TEST_N_1
+        MARK BWS_800_N_1
+          COPY -1 T
+        MARK TEST_N_1
+          TEST T = -1
+          TJMP TRYGO_P_1
+      COPY X T
+      SEEK 9999
+      COPY -1 F
+      COPY -1 X
+      REPL CAN_VISIT
+      COPY T X
+      @REP 5
+      NOOP
+      @END
+      TEST MRD
+      FJMP TRYGO_P_1
+      VOID M
+      DROP
+      COPY -1 X
+      JUMP VISIT
+
+    MARK TRYGO_P_1
+      SEEK -9999
+      SEEK 2
+      TEST EOF
+      TJMP GO_P_1
+      MARK L3
+        TEST F = 1
+        TJMP TRYGO_P_3
+        TEST EOF
+        FJMP L3
+      MARK GO_P_1
+        SEEK -9999
+        TEST F = 800
+        TJMP BWS_800_P_1
+        SEEK -9999
+        MULI F -1 T
+        JUMP TEST_P_1
+        MARK BWS_800_P_1
+          COPY -1 T
+        MARK TEST_P_1
+          TEST T = 1
+          TJMP TRYGO_P_3
+      COPY X T
+      SEEK 9999
+      COPY 1 F
+      COPY 1 X
+      REPL CAN_VISIT
+      COPY T X
+      @REP 5
+      NOOP
+      @END
+      TEST MRD
+      FJMP TRYGO_P_3
+      VOID M
+      DROP
+      COPY 1 X
+      JUMP VISIT
+
+    MARK TRYGO_P_3
+      SEEK -9999
+      SEEK 2
+      TEST EOF
+      TJMP GO_P_3
+      MARK L4
+        TEST F = 3
+        TJMP DONE
+        TEST EOF
+        FJMP L4
+      MARK GO_P_3
+        SEEK -9999
+        TEST F = 800
+        TJMP BWS_800_P_3
+        SEEK -9999
+        MULI F -1 T
+        JUMP TEST_P_3
+        MARK BWS_800_P_3
+          COPY -1 T
+        MARK TEST_P_3
+          TEST T = 3
+          TJMP DONE
+      COPY X T
+      SEEK 9999
+      COPY 3 F
+      COPY 3 X
+      REPL CAN_VISIT
+      COPY T X
+      @REP 5
+      NOOP
+      @END
+      TEST MRD
+      FJMP DONE
+      VOID M
+      DROP
+      COPY 3 X
+      JUMP VISIT
+ 
+    MARK DONE
+      SEEK -9999
+      COPY F X  
+      WIPE
+      REPL TRY_SEND_NERV
+      TEST X = 800
+      TJMP ALL_DONE
+      MULI X -1 X
+      JUMP VISIT
+
+      MARK ALL_DONE
+        LINK -1
+        NOOP
+        NOOP
+        KILL
+        JUMP SORT_FILE
+
+  MARK TRY_SEND_NERV   
+    COPY #NERV T
+    MODE
+    HOST M        
+    COPY T M
+    HALT
+
+  MARK TRY_GRAB_FILE
+    TEST X = 800
+    TJMP BACKWARDS_800
+    MULI X -1 T
+    JUMP LINK_BACK_GRAB
+
+    MARK BACKWARDS_800
+      COPY -1 T
+
+    MARK LINK_BACK_GRAB
+    LINK T
+
+    @REP 14
+    COPY @{401,1} T
+    REPL GRABBER
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    NOOP
+    TEST MRD
+    TJMP CAN_GRAB@{1,1}
+    JUMP KG_GRAB@{1,1}
+
+    MARK CAN_GRAB@{1,1}
+      LINK M
+      COPY @{401,1} M
+      HALT
+
+    MARK KG_GRAB@{1,1}
+    @END
+ 
+    NOTE CANNOT GRAB
+    LINK X
+    COPY 0 M
+    HALT
+
+  MARK GRABBER
+    LINK X
+    GRAB T
+    DROP
+
+    TEST X = 800
+    TJMP BACKWARDS_800_2
+    MULI X -1 T
+    JUMP END_GRABBER
+
+    MARK BACKWARDS_800_2
+      COPY -1 T
+      NOOP
+
+    MARK END_GRABBER
+      LINK T
+      COPY X M
+      HALT
+
+  MARK CAN_VISIT
+    LINK X
+    TEST X = 800
+    TJMP BACKWARDS_800_3
+    MULI X -1 T
+    JUMP END_CAN_VISIT
+
+    MARK BACKWARDS_800_3
+      COPY -1 T
+
+    MARK END_CAN_VISIT
+      LINK T
+      HOST M
+      HALT
+
+
+MARK SORT_FILE
+
+GRAB 400
+SEEK -9999
+COPY 0 X
+MARK LOOP_FILE
+  COPY F T
+  ADDI X 1 X
+  TEST EOF
+  FJMP LOOP_FILE
+
+NOTE COUNT OF #NERV
+DIVI X 2 X
+
+REPL SORTED_FILE
+
+MARK SEND_NEXT
+  SEEK -9999
+  HOST X
+  MARK L
+    TEST F < X
+    TJMP SWAP
+    JUMP KEEP_GOING
+
+    MARK SWAP
+      SEEK -1
+      COPY F X
+
+    MARK KEEP_GOING
+      NOTE SKIP #NERV
+      SEEK 1
+      TEST EOF   
+      FJMP L
+
+  MARK FIND_TO_SEND
+    SEEK -9999
+    MARK LL2
+      TEST X = F
+      TJMP SEND_ERASE
+      SEEK 1
+      TEST EOF
+      FJMP LL2
+
+    MARK SEND_ERASE
+      COPY X M
+      COPY F M
+      SEEK -2
+      VOID F
+      VOID F
+      JUMP SEND_NEXT
+
+MARK SORTED_FILE
+  MAKE
+  MARK LL3
+    COPY M F
+    COPY M F
+    SUBI X 1 X
+    TEST X = 0
+    FJMP LL3
+  KILL
+  DROP
+  GRAB 400
+  WIPE
